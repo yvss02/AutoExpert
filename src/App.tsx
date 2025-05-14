@@ -5,7 +5,7 @@ import { SearchBar } from "./components/SearchBar";
 import { FeaturedListings } from "./components/FeaturedListings";
 import { BrowseSection } from "./components/BrowseSection";
 import { StatsSection } from "./components/StatsSection";
-import type { CarBrand, CarType, SearchFilters } from "./types";
+import { Car, type CarBrand, type CarType, type SearchFilters } from "./types";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -26,10 +26,18 @@ function App() {
     });
   }, []);
 
-  const handleSearch = (filters: SearchFilters) => {
-    console.log("Search filters:", filters);
-    // TODO: Implement search functionality
+  const [filter, setFilter] = useState<SearchFilters>({})
+  const handleSearch = (filter: SearchFilters) => {
+    setFilter(filter)
   };
+
+  const [cars, setCars] = useState<Car[]>([])
+  useEffect(() => {
+    getDocs(collection(firestore, 'cars')).then((docs) => {
+      const cs = docs.docs.map((d) => ({ ...d.data(), id: d.id } as Car));
+      setCars(cs);
+    });
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -86,7 +94,7 @@ function App() {
         id="home"
         className="bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920')] bg-cover bg-center py-20"
       >
-        <SearchBar onSearch={handleSearch} totalVehicles={15000} />
+        <SearchBar onSearch={handleSearch} types={types} brands={brands} totalVehicles={cars.length} />
       </section>
 
       {/* Browse Sections */}
@@ -97,7 +105,7 @@ function App() {
       {/* Featured Cars Section */}
       <section id="recommendations" className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <FeaturedListings vehicles={[]} />
+          <FeaturedListings vehicles={cars} />
         </div>
       </section>
 

@@ -1,28 +1,32 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import type { SearchFilters } from "../types";
+import type { Car, CarBrand, CarType, SearchFilters } from "../types";
 
 interface SearchBarProps {
   onSearch: (filters: SearchFilters) => void;
   totalVehicles: number;
+  brands: CarBrand[];
+  types: CarType[];
 }
 
-export function SearchBar({ onSearch, totalVehicles }: SearchBarProps) {
-  const [activeCondition, setActiveCondition] = useState("all");
+export function SearchBar({
+  onSearch,
+  totalVehicles,
+  brands,
+  types,
+}: SearchBarProps) {
   const [filters, setFilters] = useState<SearchFilters>({});
+  const transmissions: Car["transmission"][] = [
+    "Automatic",
+    "Manual",
+    "Electric",
+  ];
+  const fuelTypes: Car["fuelType"][] = ["Diesel", "Electric", "CNG", "Petrol"];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch({ ...filters });
   };
-
-  const conditions = [
-    { id: "all", label: "All Types" },
-    { id: "luxury", label: "Luxury" },
-    { id: "sports", label: "Sports" },
-    { id: "family", label: "Family" },
-    { id: "eco", label: "Eco-Friendly" },
-  ];
 
   return (
     <div className="w-full max-w-6xl mx-auto">
@@ -34,60 +38,90 @@ export function SearchBar({ onSearch, totalVehicles }: SearchBarProps) {
       </div>
 
       <div className="bg-[rgba(0,0,0,0.6)] p-6 rounded-lg">
-        <div className="flex gap-1 mb-6">
-          {conditions.map((condition) => (
-            <button
-              key={condition.id}
-              className={`px-6 py-3 rounded-md transition-colors ${
-                activeCondition === condition.id
-                  ? "bg-green-500 text-white"
-                  : "text-white hover:bg-[rgba(255,255,255,0.1)]"
-              }`}
-              onClick={() => setActiveCondition(condition.id)}
-            >
-              {condition.label}
-            </button>
-          ))}
-        </div>
-
         <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4">
           <select
             className="w-full px-4 py-3 rounded-md bg-white"
             onChange={(e) =>
-              setFilters({ ...filters, brandId: e.target.value })
+              setFilters({ ...filters, brandId: e.target.value || undefined })
             }
           >
-            <option value="">Select Make</option>
-            <option value="bmw">BMW</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+            <option value="">Select Brand...</option>
+            {brands.map((b) => (
+              <option value={b.id}>{b.name}</option>
+            ))}
           </select>
 
           <select
             className="w-full px-4 py-3 rounded-md bg-white"
-            onChange={(e) => setFilters({ ...filters, typeId: e.target.value })}
+            onChange={(e) =>
+              setFilters({ ...filters, typeId: e.target.value || undefined })
+            }
           >
-            <option value="">Select Model</option>
+            <option value="">Select Type...</option>
+            {types.map((t) => (
+              <option value={t.id}>{t.name}</option>
+            ))}
           </select>
 
-          <select
+          <input
+            type="number"
+            min={1}
+            placeholder="Min Price"
+            className="w-full px-4 py-3 rounded-md bg-white"
+            onChange={(e) =>
+              setFilters({ ...filters, minPrice: Number(e.target.value) })
+            }
+          />
+
+          <input
+            type="number"
+            min={1}
+            placeholder="Max Price"
             className="w-full px-4 py-3 rounded-md bg-white"
             onChange={(e) =>
               setFilters({ ...filters, maxPrice: Number(e.target.value) })
             }
+          />
+
+          <select
+            className="w-full px-4 py-3 rounded-md bg-white"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                transmission:
+                  (e.target.value as Car["transmission"]) || undefined,
+              })
+            }
           >
-            <option value="">Price Range</option>
-            <option value="30000">Under $30,000</option>
-            <option value="50000">Under $50,000</option>
-            <option value="100000">Under $100,000</option>
+            <option value="">Select Brand...</option>
+            {transmissions.map((t) => (
+              <option value={t}>{t}</option>
+            ))}
+          </select>
+
+          <select
+            className="w-full px-4 py-3 rounded-md bg-white"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                fuelType: (e.target.value as Car["fuelType"]) || undefined,
+              })
+            }
+          >
+            <option value="">Select Fuel Type...</option>
+            {fuelTypes.map((f) => (
+              <option value={f}>{f}</option>
+            ))}
           </select>
 
           <input
-            type="text"
-            placeholder="Enter features (e.g., AWD, Hybrid)"
+            type="number"
+            max={2024}
+            min={2022}
+            placeholder="Year"
             className="w-full px-4 py-3 rounded-md bg-white"
             onChange={(e) =>
-              setFilters({ ...filters, transmission: e.target.value })
+              setFilters({ ...filters, year: Number(e.target.value) })
             }
           />
 

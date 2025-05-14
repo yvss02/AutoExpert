@@ -1,8 +1,8 @@
-import type { Vehicle } from "../types";
+import type { Car } from "../types";
 import { Calendar, Cog, Fuel, RockingChair } from "lucide-react";
 
 interface FeaturedListingsProps {
-  vehicles: Vehicle[];
+  vehicles: Car[];
 }
 
 export function FeaturedListings({ vehicles }: FeaturedListingsProps) {
