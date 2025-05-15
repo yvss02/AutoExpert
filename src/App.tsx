@@ -30,6 +30,12 @@ function App() {
   const handleSearch = (filter: SearchFilters) => {
     setFilter(filter);
   };
+  const handleBrandSearch = (brand: string) => {
+    setFilter({ ...filter, brandId: brand });
+  };
+  const handleTypeSearch = (type: string) => {
+    setFilter({ ...filter, typeId: type });
+  };
 
   const [cars, setCars] = useState<Car[]>([]);
   useEffect(() => {
@@ -118,7 +124,12 @@ function App() {
 
       {/* Browse Sections */}
       <section id="browse" className="py-16">
-        <BrowseSection makes={brands} bodyTypes={types} />
+        <BrowseSection
+          makes={brands}
+          bodyTypes={types}
+          onBrandSearch={handleBrandSearch}
+          onTypeSearch={handleTypeSearch}
+        />
       </section>
 
       {/* Featured Cars Section */}

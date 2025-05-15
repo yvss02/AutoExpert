@@ -3,9 +3,16 @@ import type { CarBrand, CarType } from "../types";
 interface BrowseSectionProps {
   makes: CarBrand[];
   bodyTypes: CarType[];
+  onBrandSearch: (brand: string) => void;
+  onTypeSearch: (type: string) => void;
 }
 
-export function BrowseSection({ makes, bodyTypes }: BrowseSectionProps) {
+export function BrowseSection({
+  makes,
+  bodyTypes,
+  onBrandSearch,
+  onTypeSearch,
+}: BrowseSectionProps) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-16">
       <div className="mb-16">
@@ -19,7 +26,11 @@ export function BrowseSection({ makes, bodyTypes }: BrowseSectionProps) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
           {makes.map((make) => (
-            <a key={make.id} className="flex flex-col items-center group">
+            <a
+              onClick={() => onBrandSearch(make.name)}
+              key={make.id}
+              className="flex flex-col items-center group"
+            >
               <img
                 src={make.logo}
                 alt={make.name}
@@ -44,7 +55,11 @@ export function BrowseSection({ makes, bodyTypes }: BrowseSectionProps) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
           {bodyTypes.map((body) => (
-            <a key={body.id} className="flex flex-col items-center group">
+            <a
+              onClick={() => onTypeSearch(body.name)}
+              key={body.id}
+              className="flex flex-col items-center group"
+            >
               <img
                 src={body.icon}
                 alt={body.name}
