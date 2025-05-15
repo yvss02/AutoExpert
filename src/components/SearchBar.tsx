@@ -47,7 +47,9 @@ export function SearchBar({
           >
             <option value="">Select Brand...</option>
             {brands.map((b) => (
-              <option value={b.id}>{b.name}</option>
+              <option key={b.id} value={b.name}>
+                {b.name}
+              </option>
             ))}
           </select>
 
@@ -59,7 +61,9 @@ export function SearchBar({
           >
             <option value="">Select Type...</option>
             {types.map((t) => (
-              <option value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.name}>
+                {t.name}
+              </option>
             ))}
           </select>
 
@@ -93,9 +97,11 @@ export function SearchBar({
               })
             }
           >
-            <option value="">Select Brand...</option>
+            <option value="">Select Transmission...</option>
             {transmissions.map((t) => (
-              <option value={t}>{t}</option>
+              <option key={t} value={t}>
+                {t}
+              </option>
             ))}
           </select>
 
@@ -110,7 +116,9 @@ export function SearchBar({
           >
             <option value="">Select Fuel Type...</option>
             {fuelTypes.map((f) => (
-              <option value={f}>{f}</option>
+              <option key={f} value={f}>
+                {f}
+              </option>
             ))}
           </select>
 

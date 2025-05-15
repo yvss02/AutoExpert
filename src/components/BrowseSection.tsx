@@ -19,7 +19,7 @@ export function BrowseSection({ makes, bodyTypes }: BrowseSectionProps) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
           {makes.map((make) => (
-            <a className="flex flex-col items-center group">
+            <a key={make.id} className="flex flex-col items-center group">
               <img
                 src={make.logo}
                 alt={make.name}
@@ -44,7 +44,7 @@ export function BrowseSection({ makes, bodyTypes }: BrowseSectionProps) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
           {bodyTypes.map((body) => (
-            <a className="flex flex-col items-center group">
+            <a key={body.id} className="flex flex-col items-center group">
               <img
                 src={body.icon}
                 alt={body.name}

@@ -7,7 +7,7 @@ import { BrowseSection } from "./components/BrowseSection";
 import { StatsSection } from "./components/StatsSection";
 import { Car, type CarBrand, type CarType, type SearchFilters } from "./types";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 function App() {
   const [brands, setBrands] = useState<CarBrand[]>([]);
@@ -26,18 +26,32 @@ function App() {
     });
   }, []);
 
-  const [filter, setFilter] = useState<SearchFilters>({})
+  const [filter, setFilter] = useState<SearchFilters>({});
   const handleSearch = (filter: SearchFilters) => {
-    setFilter(filter)
+    setFilter(filter);
   };
 
-  const [cars, setCars] = useState<Car[]>([])
+  const [cars, setCars] = useState<Car[]>([]);
   useEffect(() => {
-    getDocs(collection(firestore, 'cars')).then((docs) => {
-      const cs = docs.docs.map((d) => ({ ...d.data(), id: d.id } as Car));
-      setCars(cs);
-    });
-  }, [])
+    const conditions = [];
+    if (filter.brandId) conditions.push(where("brandId", "==", filter.brandId));
+    if (filter.typeId) conditions.push(where("typeId", "==", filter.typeId));
+    if (filter.fuelType)
+      conditions.push(where("fuelType", "==", filter.fuelType));
+    if (filter.transmission)
+      conditions.push(where("transmission", "==", filter.transmission));
+    if (filter.year) conditions.push(where("year", "==", filter.year));
+    if (filter.minPrice)
+      conditions.push(where("minPrice", ">=", filter.minPrice));
+    if (filter.maxPrice)
+      conditions.push(where("maxPrice", "<=", filter.maxPrice));
+    getDocs(query(collection(firestore, "cars"), ...conditions)).then(
+      (docs) => {
+        const cs = docs.docs.map((d) => ({ ...d.data(), id: d.id } as Car));
+        setCars(cs);
+      }
+    );
+  }, [filter]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -94,7 +108,12 @@ function App() {
         id="home"
         className="bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920')] bg-cover bg-center py-20"
       >
-        <SearchBar onSearch={handleSearch} types={types} brands={brands} totalVehicles={cars.length} />
+        <SearchBar
+          onSearch={handleSearch}
+          types={types}
+          brands={brands}
+          totalVehicles={cars.length}
+        />
       </section>
 
       {/* Browse Sections */}
