@@ -138,7 +138,7 @@ export function SearchBar({
             className="col-span-4 bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
           >
             <Search size={20} />
-            FIND RECOMMENDATIONS
+            Search
           </button>
         </form>
       </div>

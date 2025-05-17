@@ -4,12 +4,12 @@ export function StatsSection() {
   const stats = [
     {
       icon: Car,
-      value: "1550",
+      value: "200",
       label: "CARS REVIEWED",
     },
     {
       icon: Star,
-      value: "4.8",
+      value: "4.5",
       label: "AVG RATING",
     },
     {

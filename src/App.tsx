@@ -36,6 +36,19 @@ function App() {
   const handleTypeSearch = (type: string) => {
     setFilter({ ...filter, typeId: type });
   };
+  const [favorites, setFavorites] = useState<Car[]>([]);
+
+  // Fonction pour ajouter/enlever un favori
+  const toggleFavorite = (car: Car) => {
+    setFavorites((prev) => {
+      const exists = prev.find((c) => c.id === car.id);
+      if (exists) {
+        return prev.filter((c) => c.id !== car.id);
+      } else {
+        return [...prev, car];
+      }
+    });
+  };
 
   const [cars, setCars] = useState<Car[]>([]);
   useEffect(() => {
@@ -95,8 +108,9 @@ function App() {
                     className="text-gray-600 hover:text-blue-600"
                     size={24}
                   />
+
                   <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                    0
+                    {favorites.length}
                   </span>
                 </button>
                 <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors flex items-center gap-2">
@@ -135,7 +149,11 @@ function App() {
       {/* Featured Cars Section */}
       <section id="recommendations" className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <FeaturedListings vehicles={cars} />
+          <FeaturedListings
+            vehicles={cars}
+            onToggleFavorite={toggleFavorite}
+            favorites={favorites}
+          />
         </div>
       </section>
 

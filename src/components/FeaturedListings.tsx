@@ -1,11 +1,17 @@
 import type { Car } from "../types";
-import { Calendar, Cog, Fuel, RockingChair } from "lucide-react";
+import { Calendar, Cog, Fuel, Heart, RockingChair } from "lucide-react";
 
 interface FeaturedListingsProps {
   vehicles: Car[];
+  onToggleFavorite: (car: Car) => void;
+  favorites: Car[];
 }
 
-export function FeaturedListings({ vehicles }: FeaturedListingsProps) {
+export function FeaturedListings({
+  vehicles,
+  favorites,
+  onToggleFavorite,
+}: FeaturedListingsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       {vehicles.map((vehicle) => (
@@ -19,6 +25,25 @@ export function FeaturedListings({ vehicles }: FeaturedListingsProps) {
               alt={vehicle.name}
               className="w-full h-48 object-cover"
             />
+            <button
+              onClick={() => onToggleFavorite(vehicle)}
+              className="absolute top-2 right-2 bg-white p-1 rounded-full shadow"
+            >
+              {" "}
+              <Heart
+                size={20}
+                className={
+                  favorites.some((c) => c.name === vehicle.name)
+                    ? "text-red-500"
+                    : "text-gray-400"
+                }
+                fill={
+                  favorites.some((c) => c.name === vehicle.name)
+                    ? "currentColor"
+                    : "none"
+                }
+              />{" "}
+            </button>
           </div>
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-2">{vehicle.name}</h3>
@@ -32,7 +57,11 @@ export function FeaturedListings({ vehicles }: FeaturedListingsProps) {
               </div>
               <div className="flex items-center gap-2">
                 <Cog size={16} />
-                <span>{vehicle.transmission} </span>
+                <span>
+                  {(vehicle.transmission ||
+                    (vehicle as any).transmission_type) ??
+                    "N/A"}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Fuel size={16} />
