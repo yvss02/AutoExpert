@@ -1,5 +1,6 @@
 import type { Car } from "../types";
 import { Calendar, Cog, Fuel, Heart, RockingChair } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface FeaturedListingsProps {
   vehicles: Car[];
@@ -12,6 +13,7 @@ export function FeaturedListings({
   favorites,
   onToggleFavorite,
 }: FeaturedListingsProps) {
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       {vehicles.map((vehicle) => (
@@ -26,7 +28,10 @@ export function FeaturedListings({
               className="w-full h-48 object-cover"
             />
             <button
-              onClick={() => onToggleFavorite(vehicle)}
+              onClick={(e) => {
+                e.stopPropagation(); // empêcher la navigation
+                onToggleFavorite(vehicle);
+              }}
               className="absolute top-2 right-2 bg-white p-1 rounded-full shadow"
             >
               {" "}
@@ -45,7 +50,7 @@ export function FeaturedListings({
               />{" "}
             </button>
           </div>
-          <div className="p-4">
+          <div className="p-4" onClick={() => navigate(`/car/${vehicle.name}`)}>
             <h3 className="text-lg font-semibold mb-2">{vehicle.name}</h3>
             <p className="text-sm text-gray-600 mb-4">
               Starting from ${vehicle.minPrice.toLocaleString()}
