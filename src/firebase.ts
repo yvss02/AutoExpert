@@ -8,12 +8,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDk5n8bXSGLsFqhiTCsP84EKCcwnRynI9Y",
+  apiKey:"Firebase API KEY",
   authDomain: "autoexpert-project.firebaseapp.com",
   projectId: "autoexpert-project",
   storageBucket: "autoexpert-project.firebasestorage.app",
-  messagingSenderId: "401507226509",
-  appId: "1:401507226509:web:b0d338afb4001efe5863c4",
+  messagingSenderId: "",
+  appId: "1::web:",
 };
 
 // Initialize Firebase
